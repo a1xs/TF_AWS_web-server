@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo apt update -y
+sudo apt install nginx -y
+echo "<h2>Hello AWS and Teraform!</h2>" > /var/www/html/index.html
+sudo service nginx restart
+systemctl nginx enable
+
