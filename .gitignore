@@ -1,4 +1,6 @@
 /variables.tfvars
+/terraform.tfstate
+/terraform.tfstate.backup
 /.idea/
 /.terraform.lock.hcl
 /.terraform/

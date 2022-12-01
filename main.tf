@@ -27,6 +27,7 @@ resource "aws_instance" "WebServer" {
 }
 
 locals {
+  name = ["http", "https"]
   ports = [80, 443]
 }
 
