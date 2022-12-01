@@ -4,24 +4,24 @@ variable "access_key" {}
 variable "secret_key" {}
 #
 provider "aws" {
-  region = var.region
-  access_key = var.access_key
-  secret_key = var.secret_key
+    region = var.region
+    access_key = var.access_key
+    secret_key = var.secret_key
 }
 
-# resource "aws_eip" "my_static_ip" {
-#  instance = aws_instance.webserver.id
-#  instance = aws_instance.webserver.public_ip
+# resource "aws_eip" "static_ip"{
+#     instance = aws_instance.web_server.public_ip
 # }
 
-resource "aws_instance" "webserver" {
-  count = 1
-  ami = "ami-0c9354388bb36c088"
-  instance_type = "t3.nano"
-  vpc_security_group_ids = [aws_security_group.WebServer.id]
-  tags = {
-    Name = "WebServer"
+resource "aws_instance" "web_server" {
+    count = 1
+    ami = "ami-0c9354388bb36c088"
+    instance_type = "t3.nano"
+    vpc_security_group_ids = [aws_security_group.web_server_g.id]
+    tags = {
+        Name = "WebServer"
   }
+
   user_data = templatefile("./scripts/user_data.tpl", {
     name1 = "AWS",
     name2 = "Teraform"
@@ -33,13 +33,13 @@ resource "aws_instance" "webserver" {
 }
 
 locals {
-  name = ["http", "https"]
-  ports = [80, 443]
+    name = ["http", "https"]
+    ports = [80, 443]
 }
 
-resource "aws_security_group" "WebServer" {
-  name        = "Web Server Security Group"
-  description = "Allow TLS 80 Security Group"
+resource "aws_security_group" "web_server_g" {
+    name        = "Web Server Security Group"
+    description = "Allow TLS 80, 443 Security Group"
 
 #  dynamic "ingress " {
 #    for_each = local.ports
