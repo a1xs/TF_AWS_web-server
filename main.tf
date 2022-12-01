@@ -9,13 +9,12 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
-#resource "aws_eip" "my_static_ip" {
-#  instance = aws_instance.WebServer.id
-#}
+# resource "aws_eip" "my_static_ip" {
+#  instance = aws_instance.webserver.id
+#  instance = aws_instance.webserver.public_ip
+# }
 
-
-
-resource "aws_instance" "WebServer" {
+resource "aws_instance" "webserver" {
   count = 1
   ami = "ami-0c9354388bb36c088"
   instance_type = "t3.nano"
@@ -23,7 +22,14 @@ resource "aws_instance" "WebServer" {
   tags = {
     Name = "WebServer"
   }
-  user_data = file("./scripts/user_data")
+  user_data = templatefile("./scripts/user_data.tpl", {
+    name1 = "AWS",
+    name2 = "Teraform"
+  })
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 locals {
@@ -85,10 +91,10 @@ resource "aws_security_group" "WebServer" {
   }
 }
 
-#output "webserver_instence_ip" {
-#  value = aws_instance.WebServer.host_id
-#}
+# output "webserver_aws_instance" {
+#  value = aws_instance.webserver_aws_instance.id
+# }
 
-#output "webserver_public_ip" {
+# output "webserver_public_ip" {
 #  value = aws_eip.my_static_ip.public_ip
-#}
+# }
