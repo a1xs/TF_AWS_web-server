@@ -17,12 +17,12 @@ resource "aws_eip" "static_ip" {
 }
 
 resource "aws_instance" "web_server" {
-    count = 1
-    ami = "ami-0c9354388bb36c088"
-    instance_type = "t3.nano"
+    count = var.instance_count
+    ami = lookup(var.ami,var.aws_region)
+    instance_type = var.instance_type
     vpc_security_group_ids = [aws_security_group.web_server_g.id]
     tags = {
-        Name = "WebServer"
+        Name  = element(var.instance_tags, count.index)
     }
 
     user_data = templatefile("./scripts/user_data.tpl", {
