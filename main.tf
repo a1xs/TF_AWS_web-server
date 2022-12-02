@@ -9,9 +9,12 @@ provider "aws" {
     secret_key = var.secret_key
 }
 
-# resource "aws_eip" "static_ip"{
-#     instance = aws_instance.web_server.public_ip
-# }
+resource "aws_eip" "static_ip" {
+  vpc              = true
+  public_ipv4_pool = "amazon"
+  tags             = {}
+  instance = aws_instance.web_server[0].id
+}
 
 resource "aws_instance" "web_server" {
     count = 1
@@ -20,16 +23,16 @@ resource "aws_instance" "web_server" {
     vpc_security_group_ids = [aws_security_group.web_server_g.id]
     tags = {
         Name = "WebServer"
-  }
+    }
 
-  user_data = templatefile("./scripts/user_data.tpl", {
+    user_data = templatefile("./scripts/user_data.tpl", {
     name1 = "AWS",
     name2 = "Teraform"
-  })
+    })
 
-  lifecycle {
+    lifecycle {
     create_before_destroy = true
-  }
+    }
 }
 
 locals {
@@ -91,10 +94,11 @@ resource "aws_security_group" "web_server_g" {
   }
 }
 
-# output "webserver_aws_instance" {
-#  value = aws_instance.webserver_aws_instance.id
-# }
+output "webserver_aws_instance" {
+ value = aws_instance.web_server[0].id
+}
 
-# output "webserver_public_ip" {
-#  value = aws_eip.my_static_ip.public_ip
-# }
+output "instance_public_ip" {
+  description = "Public IP of EC2 instance"
+  value       = aws_instance.web_server[0].public_ip
+}
