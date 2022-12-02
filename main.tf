@@ -95,13 +95,3 @@ resource "aws_security_group" "web_server_g" {
         Name = "Web Server Security Group"
     }
 }
-
-output "web_server_instance_id" {
-    description = "Instance ID"
-    value = aws_instance.web_server[0].id
-}
-
-output "web_server_instance_pub_ip" {
-    description = "Public IP of EC2 instance"
-    value       = aws_instance.web_server[0].public_ip
-}
