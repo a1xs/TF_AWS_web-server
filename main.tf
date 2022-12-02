@@ -10,10 +10,10 @@ provider "aws" {
 }
 
 resource "aws_eip" "static_ip" {
-  vpc              = true
-  public_ipv4_pool = "amazon"
-  tags             = {}
-  instance = aws_instance.web_server[0].id
+    vpc              = true
+    public_ipv4_pool = "amazon"
+    tags             = {}
+    instance = aws_instance.web_server[0].id
 }
 
 resource "aws_instance" "web_server" {
@@ -55,6 +55,7 @@ resource "aws_security_group" "web_server_g" {
 #      ipv6_cidr_blocks = ["::/0"]
 #    }
 #  }
+
   ingress {
     description      = "http"
     from_port        = 80
@@ -95,10 +96,10 @@ resource "aws_security_group" "web_server_g" {
 }
 
 output "webserver_aws_instance" {
- value = aws_instance.web_server[0].id
+    value = aws_instance.web_server[0].id
 }
 
 output "instance_public_ip" {
-  description = "Public IP of EC2 instance"
-  value       = aws_instance.web_server[0].public_ip
+    description = "Public IP of EC2 instance"
+    value       = aws_instance.web_server[0].public_ip
 }
